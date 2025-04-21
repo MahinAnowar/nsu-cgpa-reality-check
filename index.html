@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" class="transition-colors duration-300 ease-in-out">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="image/gpa-calculator-green.png" type="image/png">
+    <title>🌀 NSU CGPA Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body class="font-sans leading-normal tracking-normal">
+
+    <section class="text-gray-700 body-font">
+         <!-- Container, Header, Main Card div remain the same -->
+         <div class="container px-4 sm:px-5 py-8 sm:py-10 mx-auto max-w-4xl">
+            <div class="flex flex-col sm:flex-row justify-between items-center w-full mb-6 pb-4 border-b border-gray-300 dark:border-gray-700"> <div class="flex items-center mb-4 sm:mb-0"> <span class="text-3xl mr-3" aria-label="Calculator Icon">🧮</span> <div> <h1 class="sm:text-2xl text-xl font-medium title-font text-gray-900">NSU CGPA Calculator</h1> <p class="text-xs sm:text-sm text-gray-600">Quickly estimate your cumulative CGPA</p> </div> </div> <button id="themeToggleBtn" class="btn btn-secondary text-xs sm:text-sm whitespace-nowrap" aria-label="Toggle Theme"> <span class="mr-1 theme-icon">☀️</span> Theme </button> </div>
+
+            <div class="main-content-card lg:w-full w-full mx-auto p-5 sm:p-8">
+                 <p class="leading-relaxed text-base mb-8 text-center text-gray-700">Enter previous details (if any) and current semester grades.</p>
+                 <!-- Table structure remains the same -->
+                <div class="overflow-x-auto mb-8 responsive-table">
+                    <table class="table-auto w-full text-left whitespace-no-wrap">
+                        <thead class="hidden sm:table-header-group"> <tr> <th class="table-header px-4 py-3 text-sm rounded-tl" scope="col" style="width: 35%;">Course Initial <span class="font-normal opacity-75">(Opt)</span></th> <th class="table-header px-4 py-3 text-sm" scope="col">Credits</th> <th class="table-header px-4 py-3 text-sm" scope="col">Grade</th> <th class="table-header px-4 py-3 text-sm rounded-tr" scope="col">Remove</th> </tr> </thead>
+                        <tbody id="mainTableBody">
+                            <tr class="previous-row data-row align-middle"> <td class="px-4 py-3 font-semibold text-base sm:text-sm">Previous Overall:</td> <td class="px-1 sm:px-4 py-2"> <input class="form-control form-control-sm" id="prevCr" aria-label="Previous Credits Completed" placeholder="Credits" type="number" min="0" step="0.1" title="Total credits completed *before* this semester."> </td> <td class="px-1 sm:px-4 py-2"> <input class="form-control form-control-sm" id="prevCg" aria-label="Previous Cumulative CGPA" placeholder="CGPA" type="number" min="0" max="4" step="0.01" title="Your cumulative CGPA *before* this semester (e.g., 3.55)."> </td> <td class="hidden sm:table-cell px-4 py-2"></td> </tr>
+                            <tr id="emptyStateRow" style="display: none;"> <td colspan="4">➕ Click 'Add Course' below to get started!</td> </tr>
+                            <!-- Course Rows Added By JS -->
+                        </tbody>
+                    </table>
+                </div>
+                 <!-- Action Buttons remain the same -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-4 action-buttons gap-4"> <button class="btn btn-outline-success order-1" id="addCourseBtn"> <span class="mr-1">➕</span> Add Course </button> <div class="flex gap-2 sm:gap-4 order-2 button-group"> <button class="btn btn-secondary flex-1 sm:flex-none" id="resetBtn"> <span class="mr-1">🔄</span> Reset </button> <button class="btn btn-primary flex-1 sm:flex-none" id="calculateBtn"> <span class="mr-1">✔️</span> Calculate CGPA </button> </div> </div>
+
+                <!-- UPDATED Results Section with SVG Gauges -->
+                 <div id="resultsSection" class="mt-8 rounded-lg" style="display: none;">
+                     <h3 class="text-lg font-semibold mb-6 text-center text-gray-800 dark:text-gray-300">📊 Calculation Results</h3>
+                     <div class="gauge-container">
+                          <!-- CGPA Gauge -->
+                         <div class="gauge">
+                             <svg viewBox="0 0 100 100">
+                                 <circle class="gauge-bg" cx="50" cy="50" r="45" stroke-width="10"></circle>
+                                 <circle class="gauge-progress gauge-progress--cgpa" id="cgpaCircleProgress" cx="50" cy="50" r="45" stroke-width="10" stroke-dasharray="282.74" stroke-dashoffset="282.74"></circle>
+                             </svg>
+                             <div class="gauge-text"> <div class="gauge-value" id="cgpaTextValue">0.00</div> <div class="gauge-label">CGPA</div> </div>
+                         </div>
+                          <!-- Credits Gauge -->
+                         <div class="gauge">
+                             <svg viewBox="0 0 100 100">
+                                 <circle class="gauge-bg" cx="50" cy="50" r="45" stroke-width="10"></circle>
+                                 <circle class="gauge-progress gauge-progress--credits" id="creditsCircleProgress" cx="50" cy="50" r="45" stroke-width="10" stroke-dasharray="282.74" stroke-dashoffset="282.74"></circle>
+                             </svg>
+                             <div class="gauge-text"> <div class="gauge-value" id="creditsTextValue">0</div> <div class="gauge-label">Credits</div> </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div id="errorMessages" class="mt-4 text-red-600 dark:text-red-400 text-sm"></div>
+             </div> <!-- End Card -->
+        </div> <!-- End Container -->
+    </section>
+     <!-- Footer -->
+     <footer class="text-center text-xs text-gray-500 mt-8 pb-6 dark:text-gray-600 px-4"> Disclaimer: This is an unofficial estimation tool. Always refer to NSU RDS for official academic records.<br>Developed in the Kamui Dimension to escape bad grades 🥲 - 2025</footer>
+
+    <!-- Main Calculator Script (UPDATED FOR ANIMATION FIX) -->
+    <script src="index.js"></script>
+
+</body>
+</html>
